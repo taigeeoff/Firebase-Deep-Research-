@@ -14,16 +14,17 @@ import {
 
 const BATCH_SIZE = 100; // Firestore recommends keeping batches under 500 operations
 
-async function deleteInBatches(chunksToDelete: DocumentReference[], documentRef: DocumentReference) {
+async function deleteInBatches(chunksToDelete: string[], documentId: string) {
     // Process chunks in batches
     for (let i = 0; i < chunksToDelete.length; i += BATCH_SIZE) {
-        const batch = writeBatch(db);
+        const batch = db.batch();
         
         // Get current batch of chunks
         const currentBatchChunks = chunksToDelete.slice(i, i + BATCH_SIZE);
         
         // Add chunk deletions to current batch
-        currentBatchChunks.forEach(chunkRef => {
+        currentBatchChunks.forEach(chunkId => {
+            const chunkRef = db.collection('chunks').doc(chunkId);
             batch.delete(chunkRef);
         });
 
@@ -32,7 +33,8 @@ async function deleteInBatches(chunksToDelete: DocumentReference[], documentRef:
         const hasRoomInBatch = currentBatchChunks.length < BATCH_SIZE;
         
         if (isLastBatch && hasRoomInBatch) {
-            batch.delete(documentRef);
+            const docRef = db.collection('documents').doc(documentId);
+            batch.delete(docRef);
         }
 
         // Commit current batch
@@ -44,8 +46,9 @@ async function deleteInBatches(chunksToDelete: DocumentReference[], documentRef:
 
     // If the document wasn't deleted in the last chunk batch, delete it separately
     if (chunksToDelete.length % BATCH_SIZE === 0) {
-        const finalBatch = writeBatch(db);
-        finalBatch.delete(documentRef);
+        const finalBatch = db.batch();
+        const docRef = db.collection('documents').doc(documentId);
+        finalBatch.delete(docRef);
         await finalBatch.commit();
     }
 }
@@ -53,9 +56,9 @@ async function deleteInBatches(chunksToDelete: DocumentReference[], documentRef:
 export async function DELETE(
     request: NextRequest,
     context: { params: Promise<{ id: string }> }
-  ) {
+) {
     const params = await context.params;
-    const id = params.id
+    const id = params.id;
 
     if (!id) {
         return NextResponse.json(
@@ -66,28 +69,22 @@ export async function DELETE(
 
     try {
         // Create query for chunks
-        const chunksCollection = collection(db, 'chunks');
-        const chunksQuery = query(
-            chunksCollection,
-            where('documentId', '==', id)
-        );
+        const chunksSnapshot = await db.collection('chunks')
+            .where('documentId', '==', id)
+            .get();
         
-        // Get chunks
-        const chunksSnapshot = await getDocs(chunksQuery);
-        const documentRef = doc(db, 'documents', id);
-        
-        // Get array of chunk references
-        const chunkRefs = chunksSnapshot.docs.map(doc => doc.ref);
+        // Get array of chunk IDs
+        const chunkIds = chunksSnapshot.docs.map(doc => doc.id);
         
         // Log the number of chunks being deleted
-        console.log(`Deleting document ${id} with ${chunkRefs.length} chunks`);
+        console.log(`Deleting document ${id} with ${chunkIds.length} chunks`);
 
         // Process deletions in batches
-        await deleteInBatches(chunkRefs, documentRef);
+        await deleteInBatches(chunkIds, id);
 
         return NextResponse.json({ 
             success: true,
-            deletedChunks: chunkRefs.length
+            deletedChunks: chunkIds.length
         });
 
     } catch (error) {

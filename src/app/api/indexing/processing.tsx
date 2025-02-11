@@ -11,7 +11,6 @@ import {
   batchUpdateDocuments
 } from '@/lib/Firebase/Firestore';
 import { EmbeddingService } from './embedding';
-import { Timestamp } from 'firebase/firestore';
 
 import {
   // Firestore,
@@ -20,6 +19,7 @@ import {
 
 import { DocumentScraper } from '@/app/api/indexing/scraping'
 import { DocumentChunker } from '@/app/api/indexing/chunking'
+import { Timestamp } from "@google-cloud/firestore";
 
 
 export class ProcessingError extends Error {

@@ -22,15 +22,14 @@ config:
 init:
 	gcloud services enable {storage,compute,run,cloudbuild,artifactregistry}.googleapis.com
 
-build: verify_yaml
+build: 
 	gcloud builds submit . \
 		--tag ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/ce-intern-repo/ce_intern_image:latest
 		
-deploy:
+deploy: verify_yaml
 	gcloud run deploy ce-intern-fe-service \
 		--image ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/ce-intern-repo/ce_intern_image:latest \
 		--region ${GCP_REGION} \
-		--service-account ce-intern-app-sa@knowledge-navigator-449510.iam.gserviceaccount.com \
 		--allow-unauthenticated \
 		--env-vars-file=deployment.yaml
 

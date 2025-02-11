@@ -1,8 +1,6 @@
 // src/lib/Firebase/types.tsx
 
-import { Timestamp } from "firebase/firestore";
-import { FieldValue, VectorValue } from "@google-cloud/firestore";
-
+import { FieldValue, VectorValue, Timestamp } from "@google-cloud/firestore";
 /**
  * Common fields interface for all Firestore documents
  */
