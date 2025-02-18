@@ -135,15 +135,23 @@ export class GeminiService {
     ): Promise<string> {
         const maxRetries = options?.maxRetries ?? 10;
         const baseDelay = options?.retryDelay ?? 5000;
-        const maxDelay = 45000; // Maximum delay cap (30 seconds)
+        const maxDelay = 30000;
         let lastError: Error | undefined;
 
         // Logistic function parameters
         const k = 1.5;  // Steepness of the curve
-        const midpoint = maxRetries / 2;  // Point of maximum growth
+        const midpoint = 7;  // Point of maximum growth
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
+                if (attempt >= maxRetries - 3) {
+                    // Increase temperature for last few attempts to prevent recitation
+                    const increasedTempOptions = {
+                        ...options,
+                        temperature: 1.8
+                    };
+                    return await this.generateContent(prompt, increasedTempOptions);
+                }
                 return await this.generateContent(prompt, options);
             } catch (error) {
                 lastError = error instanceof Error ? error : new Error('Unknown error');
