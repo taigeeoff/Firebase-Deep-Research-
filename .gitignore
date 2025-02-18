@@ -41,6 +41,8 @@ poerschmann-ce-intern-firebase-adminsdk-laexk-33fb4db8dc.json
 
 .env.local
 
+.terraform*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
