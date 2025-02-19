@@ -53,7 +53,7 @@ const AdminPanel = () => {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to extract content');
+        throw new Error('Failed to extract content from response: ', error.error || 'Failed to extract content');
       }
 
       const result = await response.json();

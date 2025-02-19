@@ -139,7 +139,7 @@ export class GeminiService {
         let lastError: Error | undefined;
 
         // Logistic function parameters
-        const k = 1.5;  // Steepness of the curve
+        const k = 1;  // Steepness of the curve
         const midpoint = 7;  // Point of maximum growth
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
