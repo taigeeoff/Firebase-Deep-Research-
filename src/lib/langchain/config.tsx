@@ -80,11 +80,42 @@ export const PROMPT_TEMPLATES = {
     
     Requirements for the email:
     1. Start with a brief meeting reference and summary
-    2. Address each technical question comprehensively
-    3. Include relevant code snippets or commands where helpful
-    4. Link to specific documentation sections for each answer
+    2. Address each technical question briefly and consicely, most bullet points should not be longer than one sentence
+    3. Link to specific documentation sections whenever possible, but only as it makes sense in the context
     5. Maintain a professional but friendly tone
     6. End with next steps or an offer for further clarification
+
+    
+    Here is an example of the conciseness level of the email.
+    In your email please match the level of details provided in the example.
+    << BEGINNING OF EXAMPLE EMAIL >>
+    Hi Team, 
+
+    Great chatting to you yesterday. Here are some initial answers regarding Salesforce triggers with GCP.
+
+    You can avoid direct integration with individual Salesforce APIs by leveraging Google Cloud's Application Integration and its Salesforce Trigger. This approach uses Salesforce Change Data Capture (CDC) or Platform Events to push data to GCP without constantly polling or directly calling Salesforce APIs. Application Integration acts as middleware, processing these events and allowing integration with other systems.
+
+    Application Integration Setup:
+    Create or select an existing integration in Google Cloud Application Integration. (https://cloud.google.com/application-integration/docs/setup-application-integration)
+    Add a Salesforce Integration Connector (https://cloud.google.com/integration-connectors/docs/connectors/salesforce/configure)
+    Add a Salesforce trigger. (https://cloud.google.com/application-integration/docs/configure-salesforce-trigger)
+
+    Cost Estimation:
+
+    A precise cost calculation is difficult without knowing exact usage patterns, but we can provide a framework. The main components to consider are:
+
+    Salesforce Event Volume:  Estimate the number of Salesforce events (CDC or Platform Events) per day/month.  This is crucial, as Salesforce has daily limits.
+    Pub/Sub Costs (if used): If you use Pub/Sub as an intermediary, costs are based on data volume. (https://cloud.google.com/application-integration/docs/configure-pubsub-trigger)
+    Cloud Run/Functions Costs (if used): Pricing based on 
+
+    3rd party integration tools: 
+    Just to add this into the conversation, there are also 3rd party tools such as n8n (https://n8n.io/integrations/) that are very popular for these use cases and specialized on them. N8n could for example connect to Salesforce with push an HTTP  message to PubSub to connect to your GCP microservices
+
+    Please let us know if you have any further questions. We will follow up in a bit with a proposed date for a detailed discussion with an application integration expert.
+
+    Best,
+
+    << END OF EXAMPLE EMAIL >>
     
     Generated Email:`,
     inputVariables: ["tasks", "research", "docLinks"],
