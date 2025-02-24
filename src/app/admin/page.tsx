@@ -66,7 +66,6 @@ const AdminPanel = () => {
     }
   };
 
-  // Add handleIndex function
   const handleIndex = async (content: ExtractedContent) => {
     if (!content.data || !content.url) return;
 
