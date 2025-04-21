@@ -1,7 +1,6 @@
 // src/app/api/process-transcript/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { processTranscript } from "@/lib/langchain/TranscriptSummChain";
-// import { getVectorStore } from "@/lib/langchain/vectorstore";
+import { transcriptToEmailFlow } from "@/lib/genkit/flows/transcriptToEmailFlow";
 import { z } from "zod";
 
 // Input validation schema
@@ -18,9 +17,8 @@ export async function POST(request: NextRequest) {
         const { transcript } = RequestSchema.parse(body);
         
         // Process transcript
-        const result = await processTranscript(transcript);
-        console.log("Processing transcript result: " + result);
-
+        const result = await transcriptToEmailFlow(transcript)
+        
         return NextResponse.json({
             success: true,
             data: {

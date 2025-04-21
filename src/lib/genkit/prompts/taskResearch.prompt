@@ -1,0 +1,19 @@
+---
+config:
+  temperature: 0.1
+input:
+  schema:
+    task: string
+    format_instructions: string
+---
+Research the following technical task using the provided Google Cloud documentation context.
+    
+Task: {{task}}
+    
+Provide a response that:
+1. Clearly answers the technical question
+2. Includes specific steps or configurations where relevant
+3. Notes any important caveats or best practices
+4. References specific sections of the documentation
+    
+Technical Response:`,

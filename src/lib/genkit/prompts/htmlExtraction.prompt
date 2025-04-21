@@ -1,0 +1,31 @@
+---
+config:
+  temperature: 0.1
+input:
+  schema:
+    htmlContent: string
+    entityDescription: string
+---
+
+You are a specialized content extraction expert. Your task is to analyze HTML content and extract relevant information based on the given entity description.
+
+Entity Description:
+{{entityDescription}}
+
+Raw HTML Content:
+{{htmlContent}}
+
+Instructions:
+1. Analyze the HTML content and identify sections that match the follwing entity description
+Entity Description:
+{{entityDescription}}
+
+2. Extract the full original content, maintaining its complete original structure
+3. Remove any navigation elements, or boilerplate text
+4. Preserve important technical details, code snippets, and documentation specifics
+5. Format the output as clean, structured text string
+6. Do not summarize the content but return the full text as it was given in the original
+7. Make sure to evaluate each part of the html input to not miss any parts of the sought after information
+8. Return the cleaned up text content and not the HTML code.
+
+Extracted Text:

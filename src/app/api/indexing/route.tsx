@@ -75,20 +75,6 @@ const validateDocUrl: InputURLValidator = (url: string): boolean => {
   }
 };
 
-// // Chunking utility function
-// function chunkContent(content: string): string[] {
-//   // Implement content chunking logic
-//   // This should split the content into appropriate sized chunks
-//   return content.split('\n\n').filter(chunk => chunk.trim().length > 0);
-// };
-
-// /**
-//  * Generates chunk IDs combining document ID and chunk index
-//  */
-// const chunkDocumentIdGenerator: DocumentIdGenerator = (id: string, index: number) => {
-//   return `${id}-chunk-${index}`;
-// };
-
 /**
  * Define Document Processor
  */

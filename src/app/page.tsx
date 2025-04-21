@@ -10,7 +10,7 @@ const LandingPage = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-3 mb-2">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Hi, I&apos;m Aaron the Customer Engineering intern
+              Hi, I&apos;m Aaron the intern
             </h1>
             <div className="relative group cursor-pointer">
               <Image

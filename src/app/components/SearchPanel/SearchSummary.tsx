@@ -23,17 +23,6 @@ const SearchSummary: React.FC<SearchSummaryProps> = ({
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="mb-6 border border-blue-200 rounded-lg p-4 bg-blue-50">
-        <div className="flex items-center justify-center gap-2 text-blue-700">
-          <Loader2 className="w-5 h-5 animate-spin" />
-          <p className="text-sm">Generating AI summary...</p>
-        </div>
-      </div>
-    );
-  }
-
   if (!summary) {
     return null;
   }

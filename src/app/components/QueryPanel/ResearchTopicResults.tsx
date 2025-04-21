@@ -80,7 +80,7 @@ const ResearchTopics: React.FC<ResearchTopicsProps> = ({ tasks, research, isLoad
                     <h4 className="text-sm font-semibold text-gray-700 mb-2">Research Findings:</h4>
                     <p className="text-gray-600 mb-3">{research[index].answer}</p>
                     
-                    {research[index].steps.length > 0 && (
+                    {research[index].steps && research[index].steps.length > 0 && (
                       <>
                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Implementation Steps:</h4>
                         <ul className="list-disc pl-4 mb-3">
@@ -91,7 +91,7 @@ const ResearchTopics: React.FC<ResearchTopicsProps> = ({ tasks, research, isLoad
                       </>
                     )}
                     
-                    {research[index].caveats.length > 0 && (
+                    {research[index].caveats && research[index].caveats.length > 0 && (
                       <>
                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Important Notes:</h4>
                         <ul className="list-disc pl-4 mb-3">
@@ -102,7 +102,7 @@ const ResearchTopics: React.FC<ResearchTopicsProps> = ({ tasks, research, isLoad
                       </>
                     )}
                     
-                    {research[index].docReferences.length > 0 && (
+                    {research[index].docReferences && research[index].docReferences.length > 0 && (
                       <>
                         <h4 className="text-sm font-semibold text-gray-700 mb-2">Documentation References:</h4>
                         <ul className="space-y-1">
