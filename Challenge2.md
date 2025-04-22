@@ -1,13 +1,13 @@
-# Challenge 2: Create Knowledge Base - "The Library Builder" 📚
+# Challenge 2: Building the Knowledge Base 📚
 
-**Mission:**  For your second mission, you'll step into the role of "The Library Builder".  Aaron the intern needs a brain, and that brain will be a knowledge base of the content you scraped and extracted in the first challenge. In this challenge, you'll learn how to ingest this data into [Firestore](https://cloud.google.com/firestore/docs/overview), break it down into manageable pieces (chunks), create dense text embeddings, store these embeddings and finally make them searchable.  This process will transform raw text into a searchable, AI-ready knowledge base.
+**Mission:**  Aaron the intern needs a brain, and that brain will be a knowledge base of the content you scraped and extracted in the first challenge. In this challenge, you'll learn how to ingest this data into [Firestore](https://cloud.google.com/firestore/docs/overview), break it down into manageable pieces (chunks), create dense text embeddings, store these embeddings and finally make them searchable.  This process will transform raw text into a searchable, AI-ready knowledge base.
 
 In case you have never worked with text embeddings and RAG before, or you need a refresher check out [our documentation](https://cloud.google.com/use-cases/retrieval-augmented-generation?hl=en).
 
 **Key Technologies & Concepts:**
 
 *   **Firestore:**  Utilizing Firestore as a document and vector database to store document chunks and their embeddings.
-*   **Gemini API (via `EmbeddingService`):**  Leveraging the Gemini API to generate embeddings for our document chunks. See `src/app/api/indexing/embedding.tsx` for implementation details.
+*   **Vertex Embedding API through Genkit (via `EmbeddingService`):**  Leveraging the Vertex API to generate embeddings for our document chunks. See `src/app/api/indexing/embedding.tsx` for implementation details.
 *   **Chunking Algorithms (`DocumentChunker`):** Implementing strategies to split documents into chunks.  Examine `src/app/api/indexing/chunking.tsx` and `src/app/api/indexing/processing.tsx` for the chunking logic.
 
 
@@ -70,7 +70,8 @@ Here some additional resources:
 
 #### Your Task: Implement the DocumentChunker 🛠️
 
-Follow the method calls starting at `src/app/api/indexing/processing.tsx` for the chunking. Find the Chunking implementaiton, choose your chunking method of choise and fix it in the codebase. The Langchain documentation above might prove to be helpful for the syntax.
+Find the Chunking implementaiton at `src/app/api/indexing/chunking.tsx`, choose your chunking method of choice and fix it in the codebase. The Langchain documentation above might prove to be helpful for the syntax.
+Follow the method calls starting at `src/app/api/indexing/processing.tsx` for the chunking. Fix the processing logic and make use of the chunker you just defined.
 
 
 ## Step 3: Configure Text Embeddings 🧬
@@ -95,6 +96,8 @@ Google provides multiple embedding models. Review the documentation below and ev
 
 Follow the indexing logic in `src/app/api/indexing/processing.tsx`, locate the embedding generation implementation. Learn about the available embedding models on GCP and decide which one to use. Finally, complete the codebase with the missing model parameters.
 
+Here is the pointer to the [Genkit embedding interface](https://js.api.genkit.dev/classes/genkit._.Genkit.html#embed).
+
 
 ## Step 4: Run and Verify the Indexing Pipeline 🚀
 
@@ -111,7 +114,7 @@ Now that we have implemented chunking and configured embeddings, let's run the c
    - Open `http://localhost:3000/admin`
 
 3. **Add Scraping Target URLs:**
-   - For example, copy one or  several GCP documentation URLs
+   - For example, copy one or several GCP documentation URLs (check our ./URLs.txt)
    - Add a description such as "GCP Documentation in it's original wording in english language"
 
 4. **Extract Content:**

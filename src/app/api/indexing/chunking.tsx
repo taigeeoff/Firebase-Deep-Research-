@@ -1,6 +1,6 @@
 // src/app/api/indexing/chunking.ts
 
-import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { RecursiveCharacterTextSplitter, TextSplitter } from "@langchain/textsplitters";
 
 
 export interface ChunkingConfig {
@@ -11,10 +11,7 @@ export interface ChunkingConfig {
 
 export class DocumentChunker {
   // private config: ChunkingConfig = DEFAULT_CONFIG,
-  private splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 500,
-    chunkOverlap: 30,
-  });
+  private splitter = new // TODO: Create splitter as class from @langchain/textsplitters
 
   async chunkText(text: string): Promise<string[]> {
     

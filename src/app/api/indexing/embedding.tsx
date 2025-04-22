@@ -1,7 +1,7 @@
 // src/app/api/indexing/embedding.ts
 import { createAI, createVertexAI } from '@/lib/genkit/genkitFactory';
 // import { gemini20Flash, textEmbedding004 } from "@genkit-ai/googleai";
-import { textEmbedding005 } from '@genkit-ai/vertexai';
+import { textEmbedding004 } from '@genkit-ai/vertexai';
 
 // const aiplatform = require('@google-cloud/aiplatform');
 
@@ -15,10 +15,7 @@ export class EmbeddingService {
     try {
       // Create an array of promises, where each promise resolves to an embedding response
       const embeddingPromises = texts.map(text =>
-        ai.embed({
-          embedder: textEmbedding005,
-          content: { content: [{ text }] },
-        })
+        // TODO: define embeding function, e.g. using Genkit
       );
 
       // Wait for all embedding requests to complete concurrently

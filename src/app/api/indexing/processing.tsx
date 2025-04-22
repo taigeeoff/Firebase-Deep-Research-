@@ -31,7 +31,7 @@ export class ProcessingError extends Error {
 
 const docScraper = new DocumentScraper();
 
-const docChunker = new DocumentChunker();
+// TODO: Define Document Chunker
 
 
 const generateChunkId: DocumentIdGenerator = (documentId: string, chunkIndex: number) => {
@@ -80,8 +80,9 @@ export class DocumentProcessor {
 
       // Step 3: Create chunks from content
       console.log('🟦 Creating chunks from content...');
-      // const chunks = this.createChunks(scrapedContent);
-      const chunks =  await docChunker.chunkText(content.cleanHTML);
+  
+      // TODO: Use DocumentChunker to create Chunks with the scraped html content
+
       console.log(`🟦 Created ${chunks.length} chunks`);
       if (chunks.length > 0) {
         console.log('🟦 Sample chunk sizes:', chunks.slice(0, 3).map(chunk => chunk.length));
