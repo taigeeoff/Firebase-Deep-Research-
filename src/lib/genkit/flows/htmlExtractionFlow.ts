@@ -25,12 +25,9 @@ export const htmlExtractionFlow = ai.defineFlow(
     // Update the input type annotation to match the new schema
     async (input: z.infer<typeof HtmlExtractionInputSchema>) => {
 
-        const htmlExtractionPrompt = ai.prompt('htmlExtraction');
+        // TODO: init html extraction prompt
 
-        const { text } = await htmlExtractionPrompt({
-            htmlContent: input.htmlContent,
-            entityDescription: input.entityDescription
-        });
+        // TODO: call html extraction prompt with input params
 
         console.log("html extraction returned: ", text);
 

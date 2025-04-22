@@ -10,13 +10,14 @@ import { vertexAI } from '@genkit-ai/vertexai';
 //     gemini25FlashPreview0417,
 // } from '@genkit-ai/googleai';
 
-import { gemini20Flash, gemini25ProPreview0325, gemini25FlashPreview0417 } from '@genkit-ai/vertexai'
+import { gemini15Flash, gemini20Flash, gemini25ProPreview0325, gemini25FlashPreview0417 } from '@genkit-ai/vertexai'
 
 // import { enableFirebaseTelemetry } from '@genkit-ai/firebase';
 // import { anthropic, claude37Sonnet } from 'genkitx-anthropic';
 
 // Define model types for better type safety
 export type SupportedModel =
+    | typeof gemini15Flash
     | typeof gemini20Flash
     | typeof gemini25ProPreview0325
     | typeof gemini25FlashPreview0417
@@ -24,7 +25,7 @@ export type SupportedModel =
 
 
 // Factory function to create GenKit instances with specific models
-export async function createAI(model: SupportedModel = gemini20Flash) {
+export async function createAI(model: SupportedModel = gemini15Flash) {
     // enableFirebaseTelemetry();
     return genkit({
         plugins: [googleAI()],
@@ -34,7 +35,7 @@ export async function createAI(model: SupportedModel = gemini20Flash) {
 }
 
 // Factory function to create GenKit instances with specific models
-export async function createBetaAI(model: SupportedModel = gemini20Flash) {
+export async function createBetaAI(model: SupportedModel = gemini15Flash) {
     // enableFirebaseTelemetry();
     return genkitBeta({
         plugins: [googleAI()],
@@ -42,7 +43,7 @@ export async function createBetaAI(model: SupportedModel = gemini20Flash) {
         promptDir: './src/lib/genkit/prompts'
     });
 }
-export async function createVertexAI(model: SupportedModel = gemini25FlashPreview0417) {
+export async function createVertexAI(model: SupportedModel = gemini15Flash) {
     // enableFirebaseTelemetry();
     return genkit({
         plugins: [
