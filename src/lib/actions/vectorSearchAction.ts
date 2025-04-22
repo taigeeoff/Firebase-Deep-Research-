@@ -36,7 +36,7 @@ export async function vectorSearchAction(query: string, options: SearchOptions):
 
     try {
         console.log("Running vector search action for query:", query);
-        const queryEmbeddings = await embeddingService.getEmbeddings([query]);
+        const queryEmbeddings = // TODO: using the embedding service, make sure you generate the query embedding with the correct input
         const queryVector = queryEmbeddings[0];
 
         if (!queryVector) {
@@ -45,13 +45,7 @@ export async function vectorSearchAction(query: string, options: SearchOptions):
         }
 
         // Configure vector search query
-        const vectorQuery: VectorQuery = chunksCollection.findNearest({
-            queryVector: queryVector,
-            vectorField: 'embedding',
-            limit: limit || 10,
-            distanceMeasure: 'COSINE',
-            // distanceThreshold: .5
-    });
+        const vectorQuery: VectorQuery = // TODO: Make a NN search call on the chunksCollection with a logical set of search parameters
 
         // Execute the query
         const querySnapshot: VectorQuerySnapshot = await vectorQuery.get();

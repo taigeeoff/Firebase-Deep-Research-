@@ -24,167 +24,167 @@ Before implementing the search functionality, let's explore the existing codebas
 
 1.  **Search Page (`src/app/search/page.tsx`)**:
     -   This is the page component for the semantic search feature.
-    -   It integrates the `useVectorSearch` hook to perform searches and display results.
-    -   It also uses the `useSummaryGen` hook to generate summaries.
+    -   It integrates hooks like `useSearchSummary` to perform searches and display results.
     -   Key elements to examine:
         -   State variable `query`: Manages the user's search input.
-        -   `handleSearch` function: Initiated when the user submits the search form. It calls `performSearch` from the `useVectorSearch` hook.
-        -   `renderSearchResults` function:  This function is responsible for rendering the search results fetched by `useVectorSearch`. It iterates through the `results` array and displays each result with its title, section, content snippet, and a link to the documentation.
+        -   `handleSearch` function: Initiated when the user submits the search form. It calls the `performSearch` function from the `useSearchSummary` hook.
+        -   Rendering logic: Displays the search results (documents) and the generated summary provided by the hook.
 
-2.  **Search Summary Component (`src/app/components/SearchPanel/SearchSummary.tsx`)**:
-    -   This component is dedicated to displaying the AI-generated summary of the search results.
+2.  **Search Summary Hook (`src/hooks/useSearchSummary.tsx`)**:
+    -   This custom React hook encapsulates the logic for fetching the search summary and the associated documents.
+    -   It manages the state for the summary, the retrieved documents, loading status, and errors.
+    -   The `performSearch` function within this hook is responsible for calling the backend API (`/api/search-summary`). This API route triggers the `simpleSearchFlow`.
+    -   Key elements to examine:
+        -   State variables: `summary`, `documents`.
+        -   `performSearch` function: Takes the user query, sends it to the backend API, receives the summary and documents, and updates the state.
+        -   Error handling logic.
+
+3.  **Search Summary Component (`src/app/components/SearchPanel/SearchSummary.tsx`)**:
+    -   This component is dedicated to displaying the AI-generated summary received from the `useSearchSummary` hook.
     -   It handles different states: loading, error, and displaying the summary content.
 
-3.  **Search Hook (`src/hooks/useVectorSearch.tsx`)**:
-    -   This hook is responsible for handling the vector search logic on the frontend.
-    -   It manages the state for search results, loading status, and errors.
-    -   The `performSearch` function in this hook is the core function that sends the search query to the backend and processes the response.
+4.  **Vector Search Action (`src/lib/actions/vectorSearchAction.ts`)**:
+    -   This is a Next.js Server Action (`'use server'`) responsible for executing the core vector search logic against Firestore.
+    -   It's called by the `simpleFirestoreVSRetriever`.
     -   Key elements to examine:
-        -   `performSearch` function: This function currently fetches data from `/api/test-vectorsearch`. You'll need to understand how this API route is implemented in the backend later.
+        -   Initialization: Sets up the Firestore client and the `EmbeddingService`.
+        -   Input: Takes the user's `query` string and search `options` (like `limit`).
+        -   Query Embedding: Uses the `EmbeddingService` to generate a vector embedding for the input `query`.
+        -   Firestore Vector Query: Constructs and executes a `findNearest` query on the `chunks` collection using the generated `queryVector`, specifying the `vectorField`, `limit`, and `distanceMeasure`.
+        -   Result Mapping: Processes the `VectorQuerySnapshot` from Firestore, extracting relevant data (`documentId`, `chunkId`, `content`, `metadata`, `score`) for each retrieved chunk and formatting it into a `SearchResult` array.
+        -   Error Handling: Includes basic error handling and logging.
 
-4.  **Summary Generation Hook (`src/hooks/useSummaryGen.tsx`)**:
-    -   This hook manages the generation of AI summaries based on search results.
-    -   It handles state for the summary content, loading status, and potential errors.
+5.  **Simple Firestore Vector Search Retriever (`src/lib/genkit/retriever/simpleSearchRetriever.ts`)**:
+    -   This file defines a custom Genkit retriever (`simpleFirestoreVSRetriever`).
+    -   It uses Genkit's `ai.defineSimpleRetriever` to integrate the vector search logic into a Genkit flow.
+    -   The retriever's core logic calls the `vectorSearchAction` to perform the actual search against Firestore.
+    -   It takes a query string and configuration (like `limit`) as input.
+    -   It maps the `SearchResult` array returned by `vectorSearchAction` into Genkit `Document` objects, making the results usable within the Genkit ecosystem.
     -   Key elements to examine:
-        -   `generateSummary` function: Takes a query and search results, sends them to `/api/generate-summary` endpoint.
-        -   State management for `summary`, `isLoading`, and `error` states.
-        -   Proper error handling and type definitions for search results and options.
+        -   How it uses `defineSimpleRetriever` to specify content and metadata extraction from `Document` objects (mapping from `SearchResult`).
+        -   The asynchronous function that handles the retrieval logic by calling `vectorSearchAction`.
+        -   The mapping of `SearchResult` to Genkit `Document` format.
 
-5.  **Vector Search Route (`src/app/api/test-vectorsearch/route.ts`)**:
-    -   This Backend route (`route.ts` file) is the endpoint for handling vector searches.
-    -   It receives the user's query from the frontend, generates an embedding for it, and performs a vector similarity search against the Firestore database.
-    -   *This is where the core RAG logic lives.* 
+6.  **Simple Search Flow (`src/lib/genkit/flows/simpleSearchFlow.ts`)**:
+    -   This file defines a Genkit flow (`simpleSearchFlow`) that orchestrates the RAG process. This flow is likely invoked by the `/api/search-summary` API route called from the `useSearchSummary` hook.
+    -   It uses the `ai.defineFlow` method.
+    -   The flow takes a text query as input (`inputSchema: z.string()`).
+    -   It defines the expected output structure, including a summary and the retrieved documents (`outputSchema`).
+    -   *This is where the core RAG logic lives.*
     -   Key elements to examine:
-        -   `Firestore`, `VectorQuery`, `VectorQuerySnapshot` from `@google-cloud/firestore` are used for interacting with Firestore and performing vector searches.
-        -   `EmbeddingService` from  `@/app/api/indexing/embedding` is used to generate embeddings for the search query.
-        -   `POST` function: This function handles the incoming search request.
-        -   It extracts the `query` from the request body.
-        -   It uses `embeddingService.getEmbeddings` to generate vector embeddings for the search query.
-        -   It constructs a `VectorQuery` to perform a nearest neighbor search in the `chunks` collection, using the generated query vector and the `embedding` field.
-        -   It executes the vector query using `vectorQuery.get()` and processes the results to extract relevant information like `documentId`, `content`, `metadata`, and `score`.
-        -   Finally, it returns the search results as a JSON response.
-
+        -   It initializes the AI instance (`createVertexAI`) and the `simpleFirestoreVSRetriever`.
+        -   Inside the flow's execution function:
+            -   It calls `ai.retrieve`, passing the `simpleFirestoreVSRetriever`, the user's `queryText`, and options (like `limit`). This step fetches relevant documents via the retriever (which calls `vectorSearchAction`).
+            -   It loads a Genkit prompt (`qaSummary`).
+            -   It calls the prompt, providing the original `queryText` (as `question`) and the retrieved `docs` as context.
+            -   It returns the generated summary text and the retrieved documents.
 
 ## Step 2: Implement Query Embeddings 🧮
 
-Now that we understand the codebase, let's implement the query embedding functionality in the vector search route. This will convert user queries into vector representations that can be used to find similar documents in our knowledge base.
+Query embeddings are handled within the `vectorSearchAction` called by the `simpleFirestoreVSRetriever`. Ensure that the action correctly generates embeddings for the incoming query before performing the Firestore vector search.
 
 ### Background
 
-In [Challenge 002](https://github.com/jakobap/aaron/blob/002-build-knowledgebase/002-build-knowledgebase.md), we created a knowledge base by:
+In [Challenge 2](Challenge2.md), we created a knowledge base by:
 1. Breaking documents into chunks
 2. Converting those chunks into embeddings
 3. Storing them in Firestore with vector search capabilities
 
-Now we need to implement the query side of this equation by converting user questions into the same vector space.
+Now, the `vectorSearchAction` needs to convert user questions into the same vector space to find relevant chunks.
 
 ### Implementation Details
 
-The `test-vectorsearch` route needs to:
-1. Receive the search query from the frontend
-2. Generate an embedding for that query using the `EmbeddingService`
-3. Use that embedding to perform a vector similarity search
-
-We already have the `EmbeddingService` class implemented (see `src/app/api/indexing/embedding.tsx`), which handles the interaction with [Google Cloud's Text Embeddings API](https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings).
+The `vectorSearchAction` should:
+1. Receive the search query.
+2. Generate an embedding for that query using an appropriate embedding service (e.g., `EmbeddingService` interacting with Vertex AI Text Embeddings API).
+3. Use that embedding vector to perform a vector similarity search in Firestore.
 
 ### Your Task
-Use the `EmbeddingService` to implement the generation of query embeddings the vector search route.
+Ensure the `vectorSearchAction` correctly implements the generation of query embeddings before executing the Firestore search.
 
 
 ## Step 3: Implement Vector Search 🔍
 
-Now that we have our query embeddings, let's implement the nearest neighbor search functionality to find the most relevant documents in our knowledge base.
+Vector search is also performed within the `vectorSearchAction`. This action needs to execute the nearest neighbor search against the Firestore collection using the generated query embedding.
 
 ### Background
 
-To complete the search functionality, we still need to:
-1. Use these embeddings to find similar documents in our Firestore collection
-2. Return the most relevant results based on vector similarity
-3. Configure appropriate distance measures and thresholds
+To complete the search functionality, `vectorSearchAction` needs to:
+1. Use the query embedding to find similar document chunks in the Firestore collection.
+2. Return the most relevant results based on vector similarity.
+3. Configure appropriate distance measures and query parameters (like `limit`).
 
 You can refer to the [Firestore Vector Search Documentation](https://firebase.google.com/docs/firestore/vector-search#make_a_nearest-neighbor_query).
 
 ### Your Task
-1. Fix the input to the similarity search hook that is called in the Search front end
-2. Implement the nearest neighbor search in the vector search route. Use the Firestore Documentation above as syntax guide. 
+Ensure the `vectorSearchAction` correctly implements the nearest neighbor search using the Firestore client SDK and returns the relevant document data.
 
 
 ## Step 4: Implement Summary Generation 📝
 
-Now that we have relevant search results, let's implement the final response generation to provide concise, accurate answers based on the retrieved context.
-The Summary prompt is the core, user facing piece of the RAG pipeline.
+Summary generation happens within the `simpleSearchFlow` using a Genkit prompt.
 
 ### Background
 
-The summary generation is the final piece of our RAG pipeline. It:
-1. Takes the user's question and retrieved context
-2. Uses a carefully crafted prompt to guide the model
-3. Generates a coherent, accurate response
-4. Includes proper citations and source attribution
+The summary generation is the final piece of our RAG pipeline within the flow. It:
+1. Takes the user's question and the context retrieved by `simpleFirestoreVSRetriever`.
+2. Uses a carefully crafted prompt (`qaSummary.prompt`) to guide the language model.
+3. Generates a coherent, accurate response based *only* on the provided documents.
+4. Should ideally include citations or references to the source documents.
 
 ### Your Task
 
-Write the prompt template to create effective result summaries. The prompt template requires two input variables. Considering the summary generation codebase, identify which variables are required in the prompt. Finally, implement the prompt accordingly
+Write the `src/lib/genkit/prompts/qaSummary.prompt` template to create effective result summaries. The prompt template requires input variables. Based on how it's called in `simpleSearchFlow` (`qaSummaryPrompt({ question: queryText }, { docs })`), identify the required variables (`question` and `docs`) and implement the prompt accordingly.
 
 Consider:
 
-1. **System Role and Context**
-   - Define a clear expert persona
-   - Set expectations for response format
-   - Specify citation requirements
+1.  **System Role and Context**
+    -   Define a clear expert persona (e.g., "You are an expert assistant specialized in Google Cloud documentation.").
+    -   Instruct the model to base its answer *solely* on the provided documents (`{{docs}}`).
+    -   Set expectations for response format.
+    -   Specify citation requirements if needed (referencing metadata from the `docs`).
 
-2. **Response Structure**
-   - Direct answer to the question
-   - Technical details and examples
-   - Source citations
-   - Confidence level
-   - Follow-up suggestions
+2.  **User Instruction**
+    -   Clearly state the user's question (`{{question}}`).
 
-3. **Edge Cases**
-   - Handling incomplete information
-   - Managing contradictory sources
-   - Dealing with ambiguous queries
-langchain 
+3.  **Response Structure**
+    -   Direct answer to the question based *only* on the context.
+    -   Technical details and examples *from the context*.
+    -   Source citations (if implemented).
+    -   Instruction on what to do if the answer isn't found in the context (e.g., "If the documents do not contain the answer, state that clearly.").
 
 ### Need Help?
 
-- Review Google's [Prompt Engineering Best Practices](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/prompt-engineering)
-- Understand [RAG-specific prompting techniques](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/rag)
-- [Langchain Prompt Templates](https://python.langchain.com/docs/concepts/prompt_templates/)
+-   Review Genkits's [RAG Guide](https://firebase.google.com/docs/genkit/rag)
+-   Consult the [Genkit Prompting Guide](https://firebase.google.com/docs/genkit/dotprompt)
 
+## Step 5:  (Bonus Task) Review Flow Parameters & Add Logging
 
-## Step 5: Complete the Prompt Parameters & Log Input and Output
+In the `simpleSearchFlow.ts` file, ensure the parameters passed to the `qaSummaryPrompt` (`{ question: queryText }` and `{ docs }`) match the variables defined in your `qaSummary.prompt` file.
 
-In the `generate-summary/route.tsx` file, we need to correctly pass the parameters to the prompt template. The `formattedPrompt` is currently missing its required parameters. Update the parameters accordingly.
+Next, let's check out monitoring to understand the flow of information.
 
-These parameters will be used by the prompt template to generate the appropriate summary response.
-
-Next, add a logging functionality that prints the full prompt that is send to the LLM every time a user triggers a search. Also, add the full output that the model returns given your prompt.
-
-You should use a syntax similar to:
-```typescript
-console.log("Hello World")
-```
-
-## Next Steps
-Run the appliction with:
+Run the application with:
 ```bash
-npm run dev
+npx genkit start -- npm run dev
 ```
 
-Once the app is running visit `/search`.
+Once the app is running visit `/search` at localhost:3000 .
 
-That will bring you to the search interface
-1. Test with a variety of queries that require information from your knowledge base to provide accurate answers
-2. Experiment with the summary prompt based on results, to cater the result summary to your preference
+That will bring you to the search interface.
+1. Test with a variety of queries that require information from your knowledge base to provide accurate answers.
+2. Observe the console logs to see the flow execution.
+3. Experiment with the `qaSummary.prompt` based on results, to cater the result summary to your preference.
 
+To monitor the traces of your RAG application visit "Traces" at localhost:4000.
+Here you should see the simpleSearchFlow invokation including the input and output of the respective sub-steps for retrieval and generation 
 
 **Challenge Complete!** 🎉
 
-Congratulations! You've built a complete RAG-based Q&A system that can:
-- Perform semantic search over GCP documentation
-- Generate accurate, well-structured summaries
-- Provide proper source attribution
-- Handle various types of technical queries
+Congratulations! You've built a complete RAG-based Q&A system using Genkit that can:
+- Perform semantic search over GCP documentation using a custom retriever.
+- Generate accurate, context-aware summaries using a Genkit flow and prompt.
+- Provide proper source attribution (if implemented in the prompt).
+- Handle various types of technical queries.
 
 On to the next one...!

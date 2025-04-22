@@ -13,9 +13,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // const { summary, docs } = await simpleSearchFlow(query);
-
-    const { summary, docs } = await researchFlow(query);
+    const { summary, docs } = await simpleSearchFlow(query);
 
     return NextResponse.json({
       summary: summary,
