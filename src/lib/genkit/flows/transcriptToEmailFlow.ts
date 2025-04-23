@@ -22,31 +22,7 @@ const TaskArraySchema = ai.defineSchema(
     z.array(TaskSchema)
 );
 
-export const taskExtractionFlow = ai.defineFlow(
-    {
-        name: "taskExtractionFlow",
-        inputSchema: z.string(),
-        outputSchema: TaskArraySchema,
-    },
-    async (transcript) => {
-
-        console.log("Running Task Extraction Flow on transcript...");
-
-        const taskExtractionPrompt = ai.prompt('taskExtraction');
-
-        const { output } = await taskExtractionPrompt(
-            {
-                transcript: transcript,
-            },
-            {
-                model: gemini25ProPreview0325,
-                output: { schema: TaskArraySchema }
-            }
-        );
-
-        return output;
-    }
-);
+export const taskExtractionFlow = // TODO: Define the Task Extraction Flow in Genkit
 
 
 // STEP 2: Task Research
@@ -152,14 +128,11 @@ export const transcriptToEmailFlow = ai.defineFlow(
     },
     async (transcript) => {
 
-        const extractedTasks = await taskExtractionFlow(transcript);
+        const extractedTasks = // TODO: Task extraction
 
-        const taskResearchResults = await taskReseachFlow(extractedTasks);
+        const taskResearchResults = //TODO: Task Research
 
-        const email = await emailAggregationFlow({
-            tasks: extractedTasks,
-            researchResults: taskResearchResults
-        });
+        const email = await // TODO: Email Aggregation
 
         return {
             tasks: extractedTasks,

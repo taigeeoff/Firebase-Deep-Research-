@@ -158,11 +158,16 @@ Consider:
 -   Review Genkits's [RAG Guide](https://firebase.google.com/docs/genkit/rag)
 -   Consult the [Genkit Prompting Guide](https://firebase.google.com/docs/genkit/dotprompt)
 
-## Step 5:  (Bonus Task) Review Flow Parameters & Add Logging
+## Step 5:  (Bonus Task) Review Flow Logs & Traces
 
 In the `simpleSearchFlow.ts` file, ensure the parameters passed to the `qaSummaryPrompt` (`{ question: queryText }` and `{ docs }`) match the variables defined in your `qaSummary.prompt` file.
 
-Next, let's check out monitoring to understand the flow of information.
+Add logging of inputs and outputs as you think they make sense. For example: 
+```typescript
+console.log("Executing simpleSearchFlow with query:", queryText)
+```
+
+Let's also check out Genkit monitoring to understand the flow of information.
 
 Run the application with:
 ```bash
@@ -175,6 +180,7 @@ That will bring you to the search interface.
 1. Test with a variety of queries that require information from your knowledge base to provide accurate answers.
 2. Observe the console logs to see the flow execution.
 3. Experiment with the `qaSummary.prompt` based on results, to cater the result summary to your preference.
+4. The Genkit developer console also provides flow and prompt testing interfaces. You can find more info [in the Genkit documentation](https://firebase.google.com/docs/genkit/devtools)
 
 To monitor the traces of your RAG application visit "Traces" at localhost:4000.
 Here you should see the simpleSearchFlow invokation including the input and output of the respective sub-steps for retrieval and generation 
