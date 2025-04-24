@@ -22,7 +22,9 @@ resource "google_project_service" "required_apis" {
     "aiplatform.googleapis.com",
     "cloudbuild.googleapis.com",
     "orgpolicy.googleapis.com",
-    "cloudtrace.googleapis.com" # Added Cloud Trace API
+    "cloudtrace.googleapis.com", # Added Cloud Trace API
+    "monitoring.googleapis.com", # Added Monitoring API
+    "logging.googleapis.com"     # Added Logging API
   ])
 
   service = each.key
@@ -79,4 +81,20 @@ resource "google_project_iam_member" "compute_trace_agent" {
   role    = "roles/cloudtrace.agent"
   member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
   depends_on = [google_project_service.required_apis] # Ensure Trace API is enabled first
+}
+
+# Grant Monitoring Metric Writer role to the default compute service account
+resource "google_project_iam_member" "compute_metric_writer" {
+  project = var.project_id
+  role    = "roles/monitoring.metricWriter"
+  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+  depends_on = [google_project_service.required_apis] # Ensure Monitoring API is enabled first
+}
+
+# Grant Logging Log Writer role to the default compute service account
+resource "google_project_iam_member" "compute_log_writer" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+  depends_on = [google_project_service.required_apis] # Ensure Logging API is enabled first
 }
