@@ -12,7 +12,7 @@ import { vertexAI } from '@genkit-ai/vertexai';
 
 import { gemini20Flash, gemini25ProPreview0325, gemini25FlashPreview0417 } from '@genkit-ai/vertexai'
 
-// import { enableFirebaseTelemetry } from '@genkit-ai/firebase';
+import { enableFirebaseTelemetry } from '@genkit-ai/firebase';
 // import { anthropic, claude37Sonnet } from 'genkitx-anthropic';
 
 // Define model types for better type safety
@@ -25,7 +25,7 @@ export type SupportedModel =
 
 // Factory function to create GenKit instances with specific models
 export async function createAI(model: SupportedModel = gemini20Flash) {
-    // enableFirebaseTelemetry();
+    enableFirebaseTelemetry();
     return genkit({
         plugins: [googleAI()],
         model,
@@ -35,7 +35,7 @@ export async function createAI(model: SupportedModel = gemini20Flash) {
 
 // Factory function to create GenKit instances with specific models
 export async function createBetaAI(model: SupportedModel = gemini20Flash) {
-    // enableFirebaseTelemetry();
+    enableFirebaseTelemetry();
     return genkitBeta({
         plugins: [googleAI()],
         model,
@@ -43,7 +43,7 @@ export async function createBetaAI(model: SupportedModel = gemini20Flash) {
     });
 }
 export async function createVertexAI(model: SupportedModel = gemini25FlashPreview0417) {
-    // enableFirebaseTelemetry();
+    enableFirebaseTelemetry();
     return genkit({
         plugins: [
           vertexAI({ location: 'us-central1' }),
