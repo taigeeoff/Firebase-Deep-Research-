@@ -9,9 +9,8 @@ import { z } from "genkit";
 // const ai = await createAI(gemini25FlashPreview0417);
 const ai = await createVertexAI();
 
-
 // Create Receivers
-const customSearchRetriever = await createSimpleFirestoreVSRetriever(ai);
+const firesoreVsRetriever = await createSimpleFirestoreVSRetriever(ai);
 
 // Define the simple search flow using the retriever
 export const simpleSearchFlow = ai.defineFlow(
@@ -31,7 +30,7 @@ export const simpleSearchFlow = ai.defineFlow(
 
     // 1. Retrieve relevant documents using the Firebase vector search retriever
     const docs = await ai.retrieve({
-      retriever: customSearchRetriever,
+      retriever: firesoreVsRetriever,
       query: queryText,
       options: { limit: 10 }
     });
