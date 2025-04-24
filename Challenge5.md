@@ -8,17 +8,19 @@ You've built a sophisticated RAG application! The final step is to deploy it to 
 
 Before deploying, ensure you have:
 
-1.  **Set up Google Cloud Project:** Your `gcloud` CLI should be configured with your project ID. If not, run:
-    ```bash
-    gcloud config set project <YOUR_PROJECT_ID>
-    ```
-    (Replace `<YOUR_PROJECT_ID>` with your actual project ID).
+1.  **Set up Firebase Project:** 
+    You are not bound to deploying your Genkit App into Firebase. However the production monitoring can currenlty only be access via the Firebase console.
+
+    To kick it off create a Firebase project (without Google Analytics) following this URL, with your GCP Project Id: `https://console.firebase.google.com/u/0/project/<<GCP_PROJECT_ID>>`
+
 2.  **Authenticated:** You need Application Default Credentials (ADC) set up. If you haven't already, run:
     ```bash
     gcloud auth login
     gcloud auth application-default login
     ```
 3.  **Environment Variables:** The application relies on environment variables (like `GCP_PROJECT_ID` used in `src/lib/Firebase/FirebaseConfig.tsx`). Cloud Run deployment via the Makefile *should* handle setting these based on your environment or `terraform.tfvars`, but double-check the `Makefile` and your Cloud Run service configuration after deployment if you encounter issues.
+
+4. **Set Up 
 
 ## Step 2: Deploying to Cloud Run using Makefile 🛠️
 
