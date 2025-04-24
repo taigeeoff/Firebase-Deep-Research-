@@ -23,7 +23,7 @@ Go to the [GCP Console](https://console.cloud.google.com/), login with your cred
 *   Click "Create fork".
 
 **3. Open Your Fork in IDX:**
-*   Go to the main page of **your newly created fork** on GitHub.
+*   Open the main page of **your newly created fork** on GitHub.
 *   Copy the HTTPS clone URL of your forked repository (e.g., `https://github.com/<YOUR_USERNAME>/aaron.git`).
 *   [Open your fork in Firebase Studio:]("https://studio.firebase.google.com/import?url=)
 <a href="https://studio.firebase.google.com/import?url=">
@@ -144,19 +144,18 @@ Here is an overview of the challenges and the learnings they contain:
 
 *   **Mission:**  Build an email generation pipeline based on an advanced RAG invocation chain.
 *   **Learnings:**
-    *   **Prompt Chaining with Langchain:**  Using Langchain's `RunnableSequence` to create complex, multi-step workflows.
     *   **Advanced RAG Techniques:**  Building a more sophisticated RAG system that involves task extraction, research, and email generation.
     *   **Prompt Engineering for Email Generation:**  Designing prompts to create emails that are not only informative but also professional and customer-friendly.
-*   **Key Technologies:** Next.js, Firestore, Gemini API, Langchain, Vector Search, Prompt Chaining, Advanced Prompt Engineering.
+*   **Key Technologies:** Next.js, Firestore, Gemini API, Genkit, Vector Search, Prompt Chaining, Advanced Prompt Engineering.
 
-### Challenge 5: Tracing & Tracking 🔭
+### Challenge 5: Deployment, Tracing & Evaluation 🔭
 
 *   **Mission:**  Observce and monitor your LLM calls.
 *   **Learnings:**
     *   **Tracing and Tracking:**  Understanding the importance of observability in LLM applications.
     *   **Langfuse Integration:**  Using Langfuse to trace requests, monitor performance, and analyze results.
     *   **Quality Control & Experimentation:**  Using tracing data to identify areas for improvement and to evaluate the impact of changes (like prompt modifications).
-*   **Key Technologies:** Next.js, Langfuse, Langchain, Observability principles.
+*   **Key Technologies:** Next.js, Genkit, Observability principles.
 
 
 # Get Ready to Explore! 🚀
