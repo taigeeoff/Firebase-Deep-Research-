@@ -15,6 +15,8 @@ export async function POST(request: NextRequest) {
 
     const { summary, docs } = await simpleSearchFlow(query);
 
+    // const { summary, docs } = await researchFlow(query);
+
     return NextResponse.json({
       summary: summary,
       docs: docs,
