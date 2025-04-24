@@ -1,8 +1,6 @@
 # Stage 1: Building the Next.js app
 FROM node:20.15.1-alpine AS builder
 
-WORKDIR /app
-
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
@@ -18,8 +16,6 @@ RUN npm run build
 # Stage 2: Setting up the production environment
 FROM node:20.15.1-alpine AS runner
 
-WORKDIR /app
-
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
@@ -27,10 +23,11 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Copy the built app from the previous stage
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.ts ./next.config.ts
-
+COPY --from=builder .next ./.next
+COPY --from=builder public ./public
+COPY --from=builder next.config.ts ./next.config.ts
+COPY --from=builder .genkit ./.genkit
+COPY --from=builder src/lib/ ./src/lib/
 
 # Set environment variables
 ENV NODE_ENV production
