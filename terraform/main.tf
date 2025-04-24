@@ -21,9 +21,10 @@ resource "google_project_service" "required_apis" {
     "cloudresourcemanager.googleapis.com",
     "aiplatform.googleapis.com",
     "cloudbuild.googleapis.com",
-    "orgpolicy.googleapis.com"
+    "orgpolicy.googleapis.com",
+    "cloudtrace.googleapis.com" # Added Cloud Trace API
   ])
-  
+
   service = each.key
   disable_dependent_services = true
 }
@@ -65,4 +66,17 @@ resource "google_firestore_index" "chunk-vector-index" {
     }
   }
   depends_on  = [google_firestore_database.database]
+}
+
+# Get the default compute service account
+data "google_compute_default_service_account" "default" {
+  project = var.project_id
+}
+
+# Grant Cloud Trace Agent role to the default compute service account
+resource "google_project_iam_member" "compute_trace_agent" {
+  project = var.project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+  depends_on = [google_project_service.required_apis] # Ensure Trace API is enabled first
 }

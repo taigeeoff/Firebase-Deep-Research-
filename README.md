@@ -67,7 +67,7 @@ gcloud config set project <YOUR_PROJECT_ID>
 
 
 ## Deploy the required Infrastructure:
-Deploy the required GCP Infrastructure by running the terraform script as follows:
+Deploy the required GCP Infrastructure by running the terraform script as follows (while in the `terraform` folder):
 
 ```bash
 cd terraform
@@ -83,7 +83,7 @@ npm install
 npm run dev
 ```
 
-*Optionally, you can deploy the web app to Cloud Run by running `make all` in root.*
+*Optionally, you can deploy the web app to Cloud Run by running `make all` in root.* - This deploys the full solution to the challenges.
 
 **Congratulations!** You've completed the basic GCP setup. You are now ready to explore the application and start the challenges!
 

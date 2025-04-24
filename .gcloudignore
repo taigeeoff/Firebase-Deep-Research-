@@ -1,0 +1,5 @@
+!./.env.local
+!.genkit
+.next
+node_modules
+.vscode
