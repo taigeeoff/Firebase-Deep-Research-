@@ -1,4 +1,4 @@
-# Building Aaron the Intern, a Generative AI Challenge Lab 👩‍💻👨‍💻
+# Building Aaron the Intern, your personal Deep Research Assistant 👩‍💻👨‍💻
 
 Imagine you are the newest engineer at Google Cloud. Your task is helping your GCP customers make their tech work on GCP. You surely would love an intern to do the tedious technical research work for you...
 
