@@ -2,6 +2,7 @@ import { TaskHandler, TaskContext, TaskYieldUpdate} from '@/lib/a2aServerMod/ser
 import { MessageData } from "genkit";
 import * as schema from '@/lib/a2aServerMod/schema'; // Adjust import path
 import { simpleSearchFlow } from '@/lib/genkit/flows/simpleSearchFlow';
+
 /**
  * Task Handler for the Movie Agent.
  */

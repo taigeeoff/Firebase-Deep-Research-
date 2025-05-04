@@ -1,5 +1,7 @@
 // src/app/.well-known/agent.json/route.ts
 import { NextResponse } from 'next/server';
+import { movieAgentCard } from '@/lib/a2a/a2aInterface';
+// import { movieAgentCard } from '../../../lib/a2a/a2aInterface';
 
 export async function GET() {
   // Add CORS headers if needed, similar to the POST endpoint,
@@ -9,7 +11,7 @@ export async function GET() {
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
-  return NextResponse.json(agentCard, { headers });
+  return NextResponse.json(movieAgentCard, { headers });
 }
 
 // Optional: Add OPTIONS handler if CORS needs preflight
