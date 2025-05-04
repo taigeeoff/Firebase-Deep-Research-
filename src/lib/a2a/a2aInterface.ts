@@ -1,6 +1,4 @@
 // src/app/api/a2a/route.ts
-import { NextResponse, type NextRequest } from 'next/server';
-import { A2AError } from '@/lib/a2aServerMod/server/error';
 import * as schema from '@/lib/a2aServerMod/schema'; // Adjust import path
 import { A2AServer } from '@/lib/a2aServerMod/server/nextjsHandler';
 import { movieAgentHandler } from './aaronQaHandler';
