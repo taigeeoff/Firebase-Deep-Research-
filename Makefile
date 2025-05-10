@@ -26,4 +26,4 @@ deploy:
 traffic:
 	gcloud run services update-traffic ce-intern-fe-service --to-latest
 
-all: config init build deploy traffics
+all: config init build deploy traffic
