@@ -17,4 +17,15 @@ Please provide a technical summary that:
 3. Maintains technical accuracy without including information not present in the context
 4. Acknowledges if any part of the question cannot be fully answered with the given context
 
-Summary and Answer:
+## Output Instructions
+ALWAYS end your response with either "COMPLETED" or "AWAITING_USER_INPUT" on its own line. If you have answered the user's question, use COMPLETED. If you need more information, use AWAITING_USER_INPUT.
+
+<example>
+<question>
+How do I get tarted with [some_gcp_tech]?
+</question>
+<output>
+Here is the documentation to get srted on [some_gcp_tech].
+COMPLETED
+</output>
+</example>

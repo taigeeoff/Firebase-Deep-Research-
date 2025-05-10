@@ -135,7 +135,7 @@ export class A2AServer {
   public async handleTaskSend(
     req: schema.SendTaskRequest,
     res: NextResponse
-  ): Promise<void> {
+  ): Promise<schema.JSONRPCResponse> {
 
     console.log(req)
 
@@ -156,6 +156,8 @@ export class A2AServer {
       currentData.history
     );
     const generator = this.taskHandler(context);
+
+    console.log("Task handler generator: ", generator)
 
     // Process generator yields
     try {
@@ -201,7 +203,9 @@ export class A2AServer {
     }
 
     // The loop finished, send the final task state
-    this.sendJsonResponse(res, req.id, currentData.task);
+    console.log("Sending response for as: ", req.id, currentData)
+
+    return this.sendJsonResponse(res, req.id, currentData.task);
   }
 
   // public async handleTaskSendSubscribe(
@@ -738,15 +742,27 @@ export class A2AServer {
     res: NextResponse,
     reqId: number | string | null,
     result: T
-  ): void {
+  ): schema.JSONRPCResponse<T> {
     if (reqId === null) {
       console.warn(
         "Attempted to send JSON response for a request with null ID."
       );
       // Should this be an error? Or just log and ignore?
       // For 'tasks/send' etc., ID should always be present.
-      return;
+      // return;
     }
-    NextResponse.json(this.createSuccessResponse(reqId, result)); // Use NextResponse.json
+    console.log("Empty response: ", res)
+    const rpcResponse = this.createSuccessResponse(reqId, result)
+    // res.json()
+    // console.log("Result to be serialized: ", res)
+    // res.json(this.createSuccessResponse(reqId, result))
+    // res.json()
+    // res.set
+
+    // res.json(this.createSuccessResponse(reqId, result)); // Use NextResponse.json
+    // NextResponse.json(this.createSuccessResponse(reqId, result));
+
+    return rpcResponse
+
   }
 }
