@@ -1,5 +1,5 @@
 # Stage 1: Building the Next.js app
-FROM node:20.15.1-alpine AS builder
+FROM node:24-alpine3.20 AS builder
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -14,7 +14,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Setting up the production environment
-FROM node:20.15.1-alpine AS runner
+FROM node:24-alpine3.20 AS runner
 
 # Copy package.json and package-lock.json
 COPY package*.json ./

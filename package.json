@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@genkit-ai/firebase": "^1.7.0",
-    "@genkit-ai/googleai": "^1.7.0",
-    "@genkit-ai/vertexai": "^1.7.0",
+    "@genkit-ai/firebase": "^1.8.0",
+    "@genkit-ai/googleai": "^1.8.0",
+    "@genkit-ai/vertexai": "^1.8.0",
     "@google-cloud/aiplatform": "^3.33.0",
     "@google-cloud/firestore": "^7.11.0",
     "@google-cloud/vertexai": "^1.9.0",
@@ -23,8 +23,8 @@
     "firebase": "^11.0.2",
     "firebase-admin": "^13.0.0",
     "fs": "^0.0.1-security",
-    "genkit": "^1.7.0",
-    "genkit-cli": "^1.7.0",
+    "genkit": "^1.8.0",
+    "genkit-cli": "^1.8.0",
     "lucide-react": "^0.460.0",
     "net": "^1.0.2",
     "next": "^15.3.1",
