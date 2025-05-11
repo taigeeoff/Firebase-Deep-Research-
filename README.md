@@ -2,7 +2,7 @@
 
 Imagine you are the newest engineer at Google Cloud. Your task is helping your GCP customers make their tech work on GCP. You surely would love an intern to do the tedious technical research work for you...
 
-Well, great that you live in the age of AI. So why not just building that intern yourself? Let's call "it": **"Aaron the intern"**.
+Well, great that you live in the age of AI. So why not just building that intern yourself? Let's call "it": **"taige the intern"**.
 
 This lab is designed to guide you through the complexity of GCP, Gemini, Firebase Genkit and more while building a real-world application. We'll be tackling a series of challenges, each building upon the last, to transform a basic Next.js application into a powerful AI-driven technical research tool.
 
